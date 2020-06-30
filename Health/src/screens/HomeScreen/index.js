@@ -1,11 +1,13 @@
 import React from 'react';
-import { View, Text, Image, FlatList, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, Image, FlatList, ScrollView, TouchableOpacity } from 'react-native';
 import { Button } from 'native-base';
 import styles from './styles';
 import Intensity from '../../components/Intensity';
 import ServiceTile from '../../components/ServiceTile';
 import FormField from '../../components/FormField';
 import CustomService from '../../components/CustomService';
+import NavigationTile from '../../components/NavigationTile';
+import Popup from '../../components/Popup';
 import custom from '../../assets/menu.png';
 import data from './data';
 import customData from './customData';
@@ -32,6 +34,7 @@ class HomeScreen extends React.Component{
                 type: ['NEAR', 'FAR'], 
                 time: '',
             },
+            popupFlag: false,
         };
     };
 
@@ -82,7 +85,7 @@ class HomeScreen extends React.Component{
                 {activeService.type && activeService.type.map(as => {
                     return (
                         <Intensity
-                            key={`${as.text}-${as.id}`}
+                            key={`${as}-${activeService.text}`}
                             item={as} 
                             customStyle={styles.individualIntensity}
                             textStyle={styles.intensityText}
@@ -143,6 +146,10 @@ class HomeScreen extends React.Component{
         this.setState({ customServices : newCustomServices, formPageFlag : false });
     };
 
+    startProgramHandler = () => {
+        this.setState({ popupFlag: true });
+    }
+
     getBodyTypeContent = () => {
         const { activeService, customServices, customServiceFlag, formPageFlag } = this.state;
         if (formPageFlag) {
@@ -151,6 +158,7 @@ class HomeScreen extends React.Component{
                     {this.formConfig 
                         && this.formConfig.map(f => 
                         <FormField 
+                            key={`${f.id}`}
                             item={f} 
                             changeTextHandler={this.changeTextHandler}
                             customStyle={styles.inputField}
@@ -173,7 +181,7 @@ class HomeScreen extends React.Component{
                         <Text style={styles.activeServiceTime}>{activeService.time}</Text>
                     </View>
                     {activeService ? (
-                    <Button style={styles.startButton}>
+                    <Button style={styles.startButton} onPress={() => this.startProgramHandler()}>
                         <Text style={styles.buttonText}>Start Program</Text>
                     </Button>
                     ) : null }
@@ -187,6 +195,7 @@ class HomeScreen extends React.Component{
                         {customServices 
                             && customServices.map(cs => 
                             <CustomService 
+                                key={`${cs.id}`}
                                 item={cs} 
                                 setCustomContent={this.setCustomContent}
                                 customStyle={styles.customTileWrapper}
@@ -210,7 +219,7 @@ class HomeScreen extends React.Component{
                     <Text style={styles.activeServiceTime}>{activeService.time}</Text>
                 </View>
                 {activeService ? (
-                <Button style={styles.startButton}>
+                <Button style={styles.startButton} onPress={() => this.startProgramHandler()}>
                     <Text style={styles.buttonText}>Start Program</Text>
                 </Button>
                 ) : null }
@@ -219,28 +228,40 @@ class HomeScreen extends React.Component{
     };
 
     render(){
-        const { footerConfig } = this.state;
+        const { footerConfig, popupFlag } = this.state;
         return(
-            <View>
+            <View style={{ justifyContent: 'center' }}>
                 <View style={styles.headerWrapper}>
                     {this.headerConfig 
                         && this.headerConfig.map(icon => <Image key={icon.id} source={icon.image} style={icon.styles} />)}
                 </View>
                 <View style={styles.headingWrapper}>
+                    {popupFlag ?  
+                        <Popup 
+                            closePopup={() => this.setState({ popupFlag: false })}
+                            popupStyle={styles.popupWrapper}
+                            popupTextStyle={styles.popupText}
+                            popupButtonStyle={styles.startButton}
+                            popButtonText={styles.buttonText}
+                        /> : 
+                        null
+                    }
                     <Text style={styles.headingText}>Programs</Text>
                     {this.getServiceTiles()}
                     {this.getBodyTypeContent()}
                 </View>
                 <View style={styles.footerWrapper}>
                 {footerConfig 
-                        && footerConfig.map(icon => {
-                            return(
-                                <TouchableOpacity onPress={() => this.presentScreenHandler(icon)} style={{ ...styles.footerTiles, backgroundColor: icon.selected ? '#D2A476' : null }}>
-                                    <Image key={icon.id} source={icon.image} style={icon.styles} />
-                                    <Text style={styles.footerText}>{icon.text}</Text>
-                                </TouchableOpacity>   
-                            );
-                        })}
+                        && footerConfig.map(icon => 
+                            <NavigationTile 
+                                key={`${icon.text}-${icon.id}`}
+                                icon={icon}
+                                presentScreenHandler={this.presentScreenHandler}
+                                customStyle={styles.footerTiles}
+                                imageStyle={icon.styles}
+                                textStyle={styles.footerText}
+                            />
+                        )}
                 </View>
             </View>
         );

@@ -4,7 +4,7 @@ export default StyleSheet.create({
     headerLogo: { width: 60, height: 60 },
     headerImage: { width: 40, height: 40, marginTop: 8 },
     headerWrapper:{ paddingVertical: 10, paddingHorizontal: 20, width: '100%', justifyContent: 'space-between', flexDirection: 'row', height: '12%' },
-    headingWrapper: { backgroundColor: '#F9C18B', height: '76%' },
+    headingWrapper: { backgroundColor: '#F9C18B', height: '76%', justifyContent: 'center', alignItems: 'center' },
     headingText: { color: '#8B5D2E', fontSize: 30, textAlign: 'center', width: '100%' },
     flatlist: { height: 90, marginTop: 10 },
     tiles: { paddingVertical: 5, alignItems: 'center', width: 100, justifyContent: 'space-around', marginHorizontal: 8 },
@@ -17,7 +17,7 @@ export default StyleSheet.create({
     individualIntensity: { justifyContent: 'center', alignItems: 'center', width: 50, height: 50, marginHorizontal: 15 },
     activeServiceTime: { fontWeight: 'bold', textAlign: 'center', fontSize: 40, color: '#8B5D2E' },
     intensityText: { fontSize: 16, color: '#8B5D2E', marginTop: 10 },
-    startButton: { marginTop: 10, backgroundColor: '#7f4307', width: 340, borderRadius: 40, height: 60, alignSelf: 'center' },
+    startButton: { marginTop: 10, backgroundColor: '#7f4307', width: 340, borderRadius: 40, height: 60, alignSelf: 'center', justifyContent: 'center' },
     buttonText: { color: '#FFFFFF', width: '100%', textAlign: 'center', fontSize: 24 },
     flatlistTile: { alignSelf: 'center', width: 350 },
     footerWrapper:{ paddingHorizontal: 8, backgroundColor: '#7f4307', paddingVertical: 10, width: '100%', justifyContent: 'space-between', flexDirection: 'row', height: '12%' },
@@ -29,5 +29,7 @@ export default StyleSheet.create({
     formCustomMainWrapper: { height: 300 },
     scrollContent: { justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap' },
     customTileWrapper: { borderRadius: 5, padding: 8, backgroundColor: '#D2A476', justifyContent: 'center', alignItems: 'center', marginTop: 20, width: '30%', height: 120 },
-    inputField: { textAlign: 'center', fontSize: 22, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#FFFFFF90', width: 340, borderRadius: 40, height: 60, alignSelf: 'center' }
+    inputField: { textAlign: 'center', fontSize: 22, paddingHorizontal: 10, marginTop: 10, backgroundColor: '#FFFFFF90', width: 340, borderRadius: 40, height: 60, alignSelf: 'center' },
+    popupWrapper: { elevation: 4, justifyContent: 'space-around', alignItems: 'center', alignSelf: 'center', position: 'absolute', zIndex: 5, width: '80%', height: 300, backgroundColor: '#FFFFFF' },
+    popupText: { textAlign: 'center', fontSize: 28, width: '80%', color: '#7f4307' },
 });

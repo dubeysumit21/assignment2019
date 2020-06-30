@@ -26,13 +26,4 @@ export default [
         type: ['NEAR', 'MID', 'FAR'], 
         time: '45 Min',
     },
-    { 
-        image: custom,
-        text: 'Custom 4',
-        id: 14,
-        selected: false, 
-        desc: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua.',
-        type: ['MID', 'FAR'], 
-        time: '40 Min',
-    },
 ];
