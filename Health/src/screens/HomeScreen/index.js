@@ -7,6 +7,11 @@ import Cart from '../../assets/buy.png';
 import data from './data';
 import Intensity from '../../components/Intensity';
 import ServiceTile from '../../components/ServiceTile';
+import Sun from '../../assets/sun.png';
+import newMenu from '../../assets/newMenu.png';
+import newUser from '../../assets/newUser.png';
+import whiteCart from '../../assets/whiteCart.png';
+import Rose from '../../assets/Rose.png';
 
 
 class HomeScreen extends React.Component{
@@ -22,6 +27,14 @@ class HomeScreen extends React.Component{
         { image: User, id: 1, styles: styles.headerImage },
         { image: Logo, id: 2, styles: styles.headerLogo },
         { image: Cart, id: 3, styles: styles.headerImage },
+    ];
+
+    footerConfig=[
+        { image: Rose, id: 1, styles: styles.footerImage, text: 'HOME' },
+        { image: newMenu, id: 2, styles: styles.footerImage, text: 'SAUNA' },
+        { image: Sun, id: 3, styles: styles.footerImage, text: 'ENHNACE' },
+        { image: newUser, id: 4, styles: styles.footerImage, text: 'SOCIAL' },
+        { image: whiteCart, id: 5, styles: styles.footerImage, text: 'SHOP' },
     ];
 
     selectServiceHandler = item => {
@@ -110,6 +123,18 @@ class HomeScreen extends React.Component{
                         ) : null }
                     </View>
                 </View>
+                <View style={styles.footerWrapper}>
+                {this.footerConfig 
+                        && this.footerConfig.map(icon => {
+                            return(
+                                <View style={styles.footerTiles}>
+                                    <Image key={icon.id} source={icon.image} style={icon.styles} />
+                                    <Text style={styles.footerText}>{icon.text}</Text>
+                                </View>
+                                
+                            );
+                        })}
+                </View>
             </View>
         );
     }
@@ -118,14 +143,14 @@ class HomeScreen extends React.Component{
 const styles = StyleSheet.create({
     headerLogo: { width: 60, height: 60 },
     headerImage: { width: 40, height: 40, marginTop: 8 },
-    headerWrapper:{ marginVertical: 10, paddingHorizontal: 20, width: '100%', justifyContent: 'space-between', flexDirection: 'row' },
-    headingWrapper: { backgroundColor: '#F9C18B' },
+    headerWrapper:{ paddingVertical: 10, paddingHorizontal: 20, width: '100%', justifyContent: 'space-between', flexDirection: 'row', height: '12%' },
+    headingWrapper: { backgroundColor: '#F9C18B', height: '76%' },
     headingText: { color: '#8B5D2E', fontSize: 30, textAlign: 'center', width: '100%' },
     flatlist: { height: 90, marginTop: 10 },
     tiles: { paddingVertical: 5, alignItems: 'center', width: 100, justifyContent: 'space-around', marginHorizontal: 8 },
     images: { width: 55, height: 55, marginBottom: 8 },
-    activeServiceHeading: { backgroundColor: '#F9C18B', width: '100%', height: 360, alignItems: 'center' },
-    activeServiceImage: { opacity: 0.4, width: 100, height: 100, marginTop: 10 },
+    activeServiceHeading: { backgroundColor: '#F9C18B', width: '100%', alignItems: 'center', paddingBottom: 15 },
+    activeServiceImage: { opacity: 0.4, width: 100, height: 100 },
     activeDesc: { width: '100%', color: '#8B5D2E', textAlign: 'center', fontSize: 17 },
     infoWrapper:{ marginTop: 15, flexDirection: 'row', justifyContent: 'space-between' },
     intensityWrapper: { justifyContent: 'space-around', flexDirection: 'row' },
@@ -135,6 +160,10 @@ const styles = StyleSheet.create({
     startButton: { marginTop: 10, backgroundColor: '#7f4307', width: 340, borderRadius: 40, height: 60 },
     buttonText: { color: '#FFFFFF', width: '100%', textAlign: 'center', fontSize: 24 },
     flatlistTile: { alignSelf: 'center', width: 350 },
+    footerWrapper:{ paddingHorizontal: 8, backgroundColor: '#7f4307', paddingVertical: 10, width: '100%', justifyContent: 'space-between', flexDirection: 'row', height: '12%' },
+    footerText: { paddingTop: 3, fontSize: 11, color: '#FFFFFF', textAlign: 'center', width: '100%' },
+    footerTiles: { justifyContent: 'center', alignItems: 'center' },
+    footerImage: { width: 35, height: 35, marginTop: 8 },
 });
 
 export default HomeScreen;
