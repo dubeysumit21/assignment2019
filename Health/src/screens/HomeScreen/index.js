@@ -1,5 +1,5 @@
 import React from 'react';
-import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Image, StyleSheet, FlatList, TouchableOpacity, ScrollView } from 'react-native';
 import { Button } from 'native-base';
 import User from '../../assets/user.png';
 import Logo from '../../assets/flower.png';
@@ -12,6 +12,8 @@ import newMenu from '../../assets/newMenu.png';
 import newUser from '../../assets/newUser.png';
 import whiteCart from '../../assets/whiteCart.png';
 import Rose from '../../assets/Rose.png';
+import custom from '../../assets/menu.png';
+import customData from './customData';
 
 
 class HomeScreen extends React.Component{
@@ -20,6 +22,15 @@ class HomeScreen extends React.Component{
         this.state = {
             services: [ ...data ],
             activeService: '',
+            footerConfig: [
+                { image: Rose, id: 1, styles: styles.footerImage, text: 'HOME', selected: false, },
+                { image: newMenu, id: 2, styles: styles.footerImage, text: 'SAUNA', selected: true, },
+                { image: Sun, id: 3, styles: styles.footerImage, text: 'ENHNACE', selected: false, },
+                { image: newUser, id: 4, styles: styles.footerImage, text: 'SOCIAL', selected: false, },
+                { image: whiteCart, id: 5, styles: styles.footerImage, text: 'SHOP', selected: false, },
+            ],
+            customServices: [ ...customData ],
+            customServiceFlag: false,
         };
     }
 
@@ -27,14 +38,6 @@ class HomeScreen extends React.Component{
         { image: User, id: 1, styles: styles.headerImage },
         { image: Logo, id: 2, styles: styles.headerLogo },
         { image: Cart, id: 3, styles: styles.headerImage },
-    ];
-
-    footerConfig=[
-        { image: Rose, id: 1, styles: styles.footerImage, text: 'HOME' },
-        { image: newMenu, id: 2, styles: styles.footerImage, text: 'SAUNA' },
-        { image: Sun, id: 3, styles: styles.footerImage, text: 'ENHNACE' },
-        { image: newUser, id: 4, styles: styles.footerImage, text: 'SOCIAL' },
-        { image: whiteCart, id: 5, styles: styles.footerImage, text: 'SHOP' },
     ];
 
     selectServiceHandler = item => {
@@ -52,8 +55,26 @@ class HomeScreen extends React.Component{
                 };
             }
         });
-        this.setState({ services: tempServices, activeService: item });
+        this.setState({ services: tempServices, activeService: item, customServiceFlag: false });
     }
+
+    presentScreenHandler = item => {
+        const { footerConfig } = this.state;
+        const newFooterConfig = footerConfig.map(foo => {
+            if (foo.id === item.id) {
+                return {
+                    ...foo,
+                    selected: true,
+                };
+            } else { 
+                return {
+                    ...foo,
+                    selected: false,
+                };
+            }
+        });
+        this.setState({ footerConfig : newFooterConfig });
+    };
 
     getIntensityInformation = () => {
         const { activeService } = this.state;
@@ -97,8 +118,69 @@ class HomeScreen extends React.Component{
         );
     };
 
+    setCustomContent = item => {
+        this.setState({ activeService: { ...item }, customServiceFlag: true });
+    };
+
+    getBodyTypeContent = () => {
+        const { activeService, customServices, customServiceFlag } = this.state;
+        if (customServiceFlag) {
+            return(
+                <View style={styles.activeServiceHeading}>
+                    <Image source={activeService.image} style={styles.activeServiceImage} />
+                    <Text style={{ ...styles.headingText, fontSize: 24, marginTop: 1, fontWeight: 'bold' }}>{activeService.text}</Text>
+                    <Text style={styles.activeDesc}>{activeService.desc}</Text>
+                    <View style={styles.infoWrapper}>
+                        {this.getIntensityInformation()}
+                        <Text style={styles.activeServiceTime}>{activeService.time}</Text>
+                    </View>
+                    {activeService ? (
+                    <Button style={styles.startButton}>
+                        <Text style={styles.buttonText}>Start Program</Text>
+                    </Button>
+                    ) : null }
+                </View>
+            );
+        }
+        if (activeService.text === 'CUSTOM') {
+            return(
+                <View style={styles.customMainWrapper}>
+                    <ScrollView contentContainerStyle={styles.scrollContent}>
+                        {customServices && customServices.map(cs => {
+                            return (
+                                <TouchableOpacity style={styles.customTileWrapper} onPress={() => this.setCustomContent(cs)}>
+                                    <Image source={cs.image} style={styles.activeServiceImage} />
+                                    <Text>{cs.text}</Text>
+                                </TouchableOpacity>
+                            );
+                        })}
+                    </ScrollView>
+                    <Button style={styles.addButton}>
+                        <Text style={styles.buttonText}>+</Text>
+                    </Button>
+                </View>
+            );
+        }
+        return(
+            <View style={styles.activeServiceHeading}>
+                <Image source={activeService.image} style={styles.activeServiceImage} />
+                <Text style={{ ...styles.headingText, fontSize: 24, marginTop: 1, fontWeight: 'bold' }}>{activeService.text}</Text>
+                <Text style={styles.activeDesc}>{activeService.desc}</Text>
+                <View style={styles.infoWrapper}>
+                    {this.getIntensityInformation()}
+                    <Text style={styles.activeServiceTime}>{activeService.time}</Text>
+                </View>
+                {activeService ? (
+                <Button style={styles.startButton}>
+                    <Text style={styles.buttonText}>Start Program</Text>
+                </Button>
+                ) : null }
+            </View>
+        );
+    };
+
     render(){
-        const { activeService } = this.state;
+        const { footerConfig } = this.state;
         return(
             <View>
                 <View style={styles.headerWrapper}>
@@ -108,30 +190,16 @@ class HomeScreen extends React.Component{
                 <View style={styles.headingWrapper}>
                     <Text style={styles.headingText}>Programs</Text>
                     {this.getServiceTiles()}
-                    <View style={styles.activeServiceHeading}>
-                        <Image source={activeService.image} style={styles.activeServiceImage} />
-                        <Text style={{ ...styles.headingText, fontSize: 24, marginTop: 1, fontWeight: 'bold' }}>{activeService.text}</Text>
-                        <Text style={styles.activeDesc}>{activeService.desc}</Text>
-                        <View style={styles.infoWrapper}>
-                            {this.getIntensityInformation()}
-                            <Text style={styles.activeServiceTime}>{activeService.time}</Text>
-                        </View>
-                        {activeService ? (
-                        <Button style={styles.startButton}>
-                            <Text style={styles.buttonText}>Start Program</Text>
-                        </Button>
-                        ) : null }
-                    </View>
+                    {this.getBodyTypeContent()}
                 </View>
                 <View style={styles.footerWrapper}>
-                {this.footerConfig 
-                        && this.footerConfig.map(icon => {
+                {footerConfig 
+                        && footerConfig.map(icon => {
                             return(
-                                <View style={styles.footerTiles}>
+                                <TouchableOpacity onPress={() => this.presentScreenHandler(icon)} style={{ ...styles.footerTiles, backgroundColor: icon.selected ? '#D2A476' : null }}>
                                     <Image key={icon.id} source={icon.image} style={icon.styles} />
                                     <Text style={styles.footerText}>{icon.text}</Text>
-                                </View>
-                                
+                                </TouchableOpacity>   
                             );
                         })}
                 </View>
@@ -161,9 +229,13 @@ const styles = StyleSheet.create({
     buttonText: { color: '#FFFFFF', width: '100%', textAlign: 'center', fontSize: 24 },
     flatlistTile: { alignSelf: 'center', width: 350 },
     footerWrapper:{ paddingHorizontal: 8, backgroundColor: '#7f4307', paddingVertical: 10, width: '100%', justifyContent: 'space-between', flexDirection: 'row', height: '12%' },
-    footerText: { paddingTop: 3, fontSize: 11, color: '#FFFFFF', textAlign: 'center', width: '100%' },
-    footerTiles: { justifyContent: 'center', alignItems: 'center' },
+    footerText: { paddingTop: 3, fontSize: 11, color: '#FFFFFF', textAlign: 'center', width: '100%', marginBottom: 5 },
+    footerTiles: { justifyContent: 'center', alignItems: 'center', padding: 4, width: 60, height: 60, borderRadius: 3 },
     footerImage: { width: 35, height: 35, marginTop: 8 },
+    addButton: { marginTop: 10, backgroundColor: '#7f4307', width: 70, borderRadius: 35, height: 70, alignSelf: 'center' },
+    customMainWrapper: { height: 300, position: 'relative', bottom: 40 },
+    scrollContent: { justifyContent: 'space-evenly', flexDirection: 'row', flexWrap: 'wrap' },
+    customTileWrapper: { borderRadius: 5, padding: 8, backgroundColor: '#D2A476', justifyContent: 'center', alignItems: 'center', marginTop: 20, width: '30%', height: 120 },
 });
 
 export default HomeScreen;
